@@ -4,3 +4,5 @@
 #launch.json folder
 .vscode/
 #Cache folder
+db.sqlite3
+.idea

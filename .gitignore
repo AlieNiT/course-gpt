@@ -5,4 +5,5 @@
 .vscode/
 #Cache folder
 db.sqlite3
+.venv
 .idea

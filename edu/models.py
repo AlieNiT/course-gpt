@@ -35,7 +35,7 @@ class Course(models.Model):
         help_text='From 1 to 5. 5 is the hardest.',
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
-    content_file = models.FileField(upload_to='courses')
+    file_url = models.URLField()
     maker = models.ForeignKey(Teacher, on_delete=models.PROTECT, related_name='made_courses')
 
     def __str__(self):

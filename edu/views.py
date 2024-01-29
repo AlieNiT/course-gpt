@@ -1,9 +1,11 @@
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from edu.models import Course, CourseRate
 from edu.serializers import CourseSerializer
 
 
+@csrf_exempt
 def course_list(request):
     if request.method == 'GET':
         courses = Course.objects.all()
@@ -13,6 +15,7 @@ def course_list(request):
         return HttpResponse(status=405)
 
 
+@csrf_exempt
 def course_detail(request, pk):
     try:
         course = Course.objects.get(pk=pk)
@@ -25,6 +28,7 @@ def course_detail(request, pk):
         return HttpResponse(status=405)
 
 
+@csrf_exempt
 def course_rate(request, pk):
     try:
         course = Course.objects.get(pk=pk)

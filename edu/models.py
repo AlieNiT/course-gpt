@@ -27,7 +27,7 @@ class Transaction(models.Model):
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     description = models.CharField(max_length=1024)
     price = models.PositiveIntegerField(help_text='In Tomans')
     estimate_days = models.PositiveIntegerField()
@@ -36,6 +36,7 @@ class Course(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     file_url = models.URLField()
+    picture = models.FilePathField(null=True, blank=True)
     maker = models.ForeignKey(Teacher, on_delete=models.PROTECT, related_name='made_courses')
 
     def __str__(self):

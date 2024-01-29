@@ -9,4 +9,4 @@ from edu.models import Course
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['pk', 'name', 'description', 'price', 'estimate_days', 'difficulty']
+        fields = ['pk', 'name', 'description', 'price', 'estimate_days', 'difficulty', 'file_url']

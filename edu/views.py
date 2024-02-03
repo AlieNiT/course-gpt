@@ -65,6 +65,7 @@ def course_enroll(request, pk):
     if CourseEnrollment.objects.filter(student=user, course=course).exists():
         return HttpResponse('You have enrolled this course before.', status=400)
     CourseEnrollment.objects.create(student=user, course=course)
+    user.balance -= course.price
     return HttpResponse('Enrolled successfully', status=201)
 
 
@@ -96,6 +97,12 @@ def course_rate(request, pk):
 
 @csrf_exempt
 def basic_login(request):
+    # test = True
+    # if test:
+    #     user = authenticate(username='admin', password='admin')
+    #     login(request, user)
+    #     return HttpResponse('Logged in successfully.', status=200)
+
     if request.method == 'GET':
         return HttpResponse('You must login first.', status=401)
     if request.method != 'POST':

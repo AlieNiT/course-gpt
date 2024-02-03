@@ -23,5 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('courses/', views.course_list),
     path('courses/<int:pk>/', views.course_detail),
-    path('course-rate/<int:pk>/', views.course_rate),
+    path('courses/<int:pk>/enroll', views.course_enroll),
+    path('courses/<int:pk>/rate', views.course_rate),
+    path('login/', views.basic_login),
+    path('logout/', views.basic_logout),
+    path('whoami/', views.get_user_info),
+    path('enrolls/', views.get_user_courses),
 ]

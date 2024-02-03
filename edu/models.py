@@ -5,17 +5,22 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 
+USER_TYPES = (
+    ("STUDENT", "STUDENT"),
+    ("TEACHER", "TEACHER"),
+)
+
 
 class User(AbstractUser):
     balance = models.PositiveIntegerField(help_text='In Tomans', default=0)
+    type = models.CharField(choices=USER_TYPES, max_length=10)
 
-
-class Student(User):
-    pass
-
-
-class Teacher(User):
-    pass
+    @property
+    def courses(self):
+        if self.type == 'STUDENT':
+            return Course.objects.filter(enrollments__student=self)
+        else:
+            return Course.objects.filter(maker=self)
 
 
 class Transaction(models.Model):
@@ -37,15 +42,23 @@ class Course(models.Model):
     )
     file_url = models.URLField()
     picture = models.FilePathField(null=True, blank=True)
-    maker = models.ForeignKey(Teacher, on_delete=models.PROTECT, related_name='made_courses')
+    maker = models.ForeignKey(User, on_delete=models.PROTECT, related_name='made_courses')
 
     def __str__(self):
         return self.name
 
+    def clean(self):
+        if self.maker.type != 'TEACHER':
+            raise ValueError('only teachers can make courses.')
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.clean()
+        super().save(force_insert, force_update, using, update_fields)
+
 
 class CourseRate(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course_rates')
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='course_rates')
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='course_rates')
     date_created = models.DateTimeField(auto_now=True)
     comment = models.CharField(max_length=256, blank=True, default='')
     rate = models.PositiveIntegerField(
@@ -53,15 +66,31 @@ class CourseRate(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
 
+    def clean(self):
+        if self.student.type != 'STUDENT':
+            raise ValueError('only students can rate courses.')
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.clean()
+        super().save(force_insert, force_update, using, update_fields)
+
 
 class CourseEnrollment(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='enrollments')
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enrollments')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments')
     date_started = models.DateTimeField(auto_now=True)
     date_expired = models.DateTimeField(default=timezone.now() + timedelta(days=30))
-    progress = models.PositiveIntegerField()
+    progress = models.PositiveIntegerField(default=0)
     bookmarks = models.ManyToManyField('Bookmark')
-    conversation_file = models.FileField(upload_to='conversations')
+    conversation_file = models.FileField(upload_to='conversations', null=True, blank=True)
+
+    def clean(self):
+        if self.student.type != 'STUDENT':
+            raise ValueError('only students can enroll courses.')
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.clean()
+        super().save(force_insert, force_update, using, update_fields)
 
 
 class Bookmark(models.Model):

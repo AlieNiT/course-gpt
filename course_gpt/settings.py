@@ -9,8 +9,18 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+
+import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+def get_bool_conf(key: str, default: bool):
+    return os.environ.get(key, default=str(default)).lower() == 'true'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,22 +30,17 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u+w^v-d%6zr8h#d*sob&m+fk=0ji2svk2pl)l@+u+ch)m*h65o'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_bool_conf('DEBUG', True)
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
-
-CORS_ORIGIN_ALLOW_ALL = False
-
-CORS_ORIGIN_WHITELIST = (
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-)
+ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '127.0.0.1').split(',')]
+CORS_ORIGIN_ALLOW_ALL = get_bool_conf('CORS_ORIGIN_ALLOW_ALL', True)
+CORS_ORIGIN_WHITELIST = [url.strip() for url in
+                         os.environ.get('CORS_ORIGIN_WHITELIST', 'http://127.0.0.1:3000').split(',')]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,12 +86,8 @@ WSGI_APPLICATION = 'course_gpt.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
 
 # Password validation

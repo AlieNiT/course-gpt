@@ -1,11 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from edu.models import User, Student, Teacher, Course, CourseEnrollment, Transaction, Bookmark, CourseRate
-
-admin.site.register(User, UserAdmin)
-admin.site.register(Student, UserAdmin)
-admin.site.register(Teacher, UserAdmin)
+from edu.models import User, Course, CourseEnrollment, Transaction, Bookmark, CourseRate
 
 
 @admin.register(Course)
@@ -31,3 +27,19 @@ class CourseRateAdmin(admin.ModelAdmin):
 @admin.register(Bookmark)
 class BookmarkAdmin(admin.ModelAdmin):
     list_display = ['course_enrollment', 'position', 'note']
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['username', 'email', 'type', 'balance']
+    fieldsets = (
+        ('Info', {
+            'fields': (
+                'username',
+                'email',
+                'type',
+                'balance',
+            )
+        }),
+    )
+
+

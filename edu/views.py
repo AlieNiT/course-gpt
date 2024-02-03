@@ -94,7 +94,7 @@ def course_rate(request, pk):
 @csrf_exempt
 def basic_login(request):
     if request.method == 'GET':
-        return HttpResponse('You must login first.')
+        return HttpResponse('You must login first.', status=401)
     if request.method != 'POST':
         return HttpResponse(status=405)
     try:

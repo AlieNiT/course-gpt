@@ -37,6 +37,7 @@ DEBUG = get_bool_conf('DEBUG', True)
 
 ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '127.0.0.1').split(',')]
 CORS_ORIGIN_ALLOW_ALL = get_bool_conf('CORS_ORIGIN_ALLOW_ALL', True)
+CORS_ALLOW_CREDENTIALS = get_bool_conf('CORS_ALLOW_CREDENTIALS', True)
 CORS_ORIGIN_WHITELIST = [url.strip() for url in
                          os.environ.get('CORS_ORIGIN_WHITELIST', 'http://127.0.0.1:3000').split(',')]
 

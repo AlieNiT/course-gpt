@@ -84,7 +84,10 @@ def course_rate(request, pk):
             for cr in course_rates:
                 rate += cr.rate
             rate /= course_rates.count()
-        return JsonResponse({'rate': rate})
+        return JsonResponse({
+            'rate': rate,
+            'count': course_rates.count()
+        })
     # elif request.method == 'POST':
         # TODO: Add create new rate in post
     else:

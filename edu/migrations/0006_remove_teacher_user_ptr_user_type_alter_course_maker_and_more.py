@@ -13,36 +13,36 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='teacher',
-            name='user_ptr',
-        ),
+        # migrations.RemoveField(
+        #     model_name='teacher',
+        #     name='user_ptr',
+        # ),
         migrations.AddField(
             model_name='user',
             name='type',
             field=models.CharField(choices=[('STUDENT', 'STUDENT'), ('TEACHER', 'TEACHER')], default='STUDENT', max_length=10),
             preserve_default=False,
         ),
-        migrations.AlterField(
-            model_name='course',
-            name='maker',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='made_courses', to=settings.AUTH_USER_MODEL),
-        ),
+        # migrations.AlterField(
+        #     model_name='course',
+        #     name='maker',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='made_courses', to=settings.AUTH_USER_MODEL),
+        # ),
         migrations.AlterField(
             model_name='courseenrollment',
             name='date_expired',
             field=models.DateTimeField(default=datetime.datetime(2024, 3, 4, 19, 22, 57, 407513, tzinfo=datetime.timezone.utc)),
         ),
-        migrations.AlterField(
-            model_name='courseenrollment',
-            name='student',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='enrollments', to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AlterField(
-            model_name='courserate',
-            name='student',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='course_rates', to=settings.AUTH_USER_MODEL),
-        ),
+        # migrations.AlterField(
+        #     model_name='courseenrollment',
+        #     name='student',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='enrollments', to=settings.AUTH_USER_MODEL),
+        # ),
+        # migrations.AlterField(
+        #     model_name='courserate',
+        #     name='student',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='course_rates', to=settings.AUTH_USER_MODEL),
+        # ),
         migrations.DeleteModel(
             name='Student',
         ),

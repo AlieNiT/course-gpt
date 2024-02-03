@@ -79,7 +79,6 @@ class CourseEnrollment(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enrollments')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments')
     date_started = models.DateTimeField(auto_now=True)
-    date_expired = models.DateTimeField(default=timezone.now() + timedelta(days=30))
     progress = models.PositiveIntegerField(default=0)
     bookmarks = models.ManyToManyField('Bookmark')
     conversation_file = models.FileField(upload_to='conversations', null=True, blank=True)

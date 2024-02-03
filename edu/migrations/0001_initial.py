@@ -118,7 +118,7 @@ class Migration(migrations.Migration):
                 ('conversation_file', models.FileField(upload_to='conversations')),
                 ('bookmarks', models.ManyToManyField(to='edu.bookmark')),
                 ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='enrollments', to='edu.course')),
-                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='enrollments', to='edu.student')),
+                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='enrollments', to='edu.User')),
             ],
         ),
         migrations.AddField(
@@ -134,12 +134,12 @@ class Migration(migrations.Migration):
                 ('comment', models.CharField(blank=True, default='', max_length=256)),
                 ('rate', models.PositiveIntegerField(help_text='From 1 to 5. 5 is the best.', validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(5)])),
                 ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='course_rates', to='edu.course')),
-                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='course_rates', to='edu.student')),
+                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='course_rates', to='edu.User')),
             ],
         ),
         migrations.AddField(
             model_name='course',
             name='maker',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='made_courses', to='edu.teacher'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='made_courses', to='edu.User'),
         ),
     ]

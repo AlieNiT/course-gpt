@@ -65,8 +65,11 @@ def course_enroll(request, pk):
         return HttpResponse('Course does not found', status=404)
     if CourseEnrollment.objects.filter(student=user, course=course).exists():
         return HttpResponse('You have enrolled this course before.', status=400)
+    if user.balance < course.price:
+        return HttpResponse('You dont have enough balance to enroll this course.', status=400)
     CourseEnrollment.objects.create(student=user, course=course)
     user.balance -= course.price
+    user.save()
     return HttpResponse('Enrolled successfully', status=201)
 
 
@@ -91,7 +94,7 @@ def course_rate(request, pk):
             'count': course_rates.count()
         })
     # elif request.method == 'POST':
-        # TODO: Add create new rate in post
+    # TODO: Add create new rate in post
     else:
         return HttpResponse(status=405)
 

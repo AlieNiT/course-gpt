@@ -13,7 +13,7 @@ USER_TYPES = (
 
 class User(AbstractUser):
     balance = models.PositiveIntegerField(help_text='In Tomans', default=0)
-    type = models.CharField(choices=USER_TYPES, max_length=10)
+    type = models.CharField(choices=USER_TYPES, default='STUDENT', max_length=10)
 
     @property
     def courses(self):

@@ -1,10 +1,11 @@
+from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth import authenticate, login, logout
 
-from edu.models import Course, CourseRate, CourseEnrollment
+from edu.models import Course, CourseRate, CourseEnrollment, User
 from edu.serializers import CourseSerializer, UserSerializer
 
 
@@ -94,6 +95,31 @@ def course_rate(request, pk):
     else:
         return HttpResponse(status=405)
 
+@csrf_exempt
+def signup(request):
+    if request.method == 'POST':
+        try:
+            username = request.POST["username"]
+            email = request.POST["email"]
+            password = request.POST["password"]
+            confirm_password = request.POST["confirmPassword"]
+        except KeyError:
+            return HttpResponse('All fields are required.', status=400)
+
+        if password != confirm_password:
+            return HttpResponse('Passwords do not match.', status=400)
+
+        if User.objects.filter(email=email).exists():
+            return HttpResponse('Username or email already exists.', status=400)
+        try:
+            user = User.objects.create_user(username=username, email=email, password=password, balance=1000000)
+        except IntegrityError:
+            return HttpResponse('Username or email already exists.', status=400)
+
+        login(request, user)
+        return HttpResponse('Signup successful', status=201)
+    else:
+        return HttpResponse(status=405)
 
 @csrf_exempt
 def basic_login(request):

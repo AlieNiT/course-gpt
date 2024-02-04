@@ -25,6 +25,7 @@ urlpatterns = [
     path('courses/<int:pk>/', views.course_detail),
     path('courses/<int:pk>/enroll', views.course_enroll),
     path('courses/<int:pk>/rate', views.course_rate),
+    path('signup/', views.signup),
     path('login/', views.basic_login),
     path('logout/', views.basic_logout),
     path('whoami/', views.get_user_info),
